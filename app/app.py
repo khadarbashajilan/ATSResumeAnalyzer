@@ -1,6 +1,7 @@
 import streamlit as st
 
-from core import analyze_resume
+from ..src.core import analyze_resume
+
 
 # Page Config
 st.set_page_config(

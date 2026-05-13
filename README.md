@@ -1,131 +1,213 @@
 # ATS Resume Analyzer
 
-An advanced Applicant Tracking System (ATS) Resume Evaluator that analyzes resumes against job descriptions using strict ATS-style analysis. This component provides both a Python API and a Streamlit web interface for evaluating candidate resumes.
+AI-powered ATS Resume Analyzer built with Python, Streamlit, and NVIDIA AI endpoints to evaluate resumes against job descriptions using ATS-style scoring, skill matching, and hiring recommendations.
+
+---
 
 ## Features
 
-- **ATS Keyword Alignment**: Evaluates resume content against job description keywords
-- **Technical Skill Matching**: Identifies matching and missing technical skills
-- **Experience Analysis**: Assesses experience relevance to the job description
-- **Resume Strengths and Weaknesses**: Identifies strong points and areas for improvement
-- **Hiring Recommendations**: Provides final hiring recommendations
-- **Interview Probability Estimation**: Estimates the likelihood of interview selection
-- **Web Interface**: User-friendly Streamlit interface for easy resume analysis
+- ATS compatibility scoring
+- Resume vs Job Description comparison
+- Technical skill extraction
+- Missing skill detection
+- Experience alignment analysis
+- Resume strengths & weaknesses
+- AI-generated improvement suggestions
+- Interview probability estimation
+- Structured JSON schema responses
+- Interactive Streamlit web interface
+
+---
+
+## Tech Stack
+
+- Python
+- Streamlit
+- LangChain
+- NVIDIA AI Endpoints
+- Pydantic
+- Prompt Engineering
+- Pandas & NumPy
+
+---
+
+## Project Structure
+
+```bash
+ATSResumeAnalyzer/
+│
+├── app/
+│   └── app.py                  # Streamlit frontend
+│
+├── src/
+│   ├── core.py                 # ATS analysis engine
+│   ├── schema.py               # Pydantic response schema
+│   ├── promptTemplates.py      # Prompt templates
+│   └── __init__.py
+│
+├── .env.example
+├── requirements.txt
+├── .gitignore
+├── README.md
+└── LICENSE
+```
+
+---
 
 ## Installation
 
-1. Ensure you have the required dependencies installed (see project root README.md for details).
+Clone the repository:
 
-2. Navigate to the ATSResumeAnalyzer directory:
-   ```bash
-   cd ATSResumeAnalyzer
-   ```
+```bash
+git clone https://github.com/khadarbashajilan/ATSResumeAnalyzer.git
+cd ATSResumeAnalyzer
+```
 
-## Usage
+Create a virtual environment:
 
-### Python API
+### Windows
 
-1. Import the `analyze_resume` function from `core.py`:
-   ```python
-   from core import analyze_resume
-   ```
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-2. Call the function with resume text and job description text:
-   ```python
-   result = analyze_resume(resume_text, job_description_text)
-   ```
+### Linux/macOS
 
-3. The function returns an `ATSResponse` object with the following fields:
-   - `ats_score`: ATS compatibility score out of 100
-   - `matching_skills`: List of skills matching the job description
-   - `missing_skills`: List of important missing skills
-   - `experience_alignment`: Summary of experience alignment
-   - `resume_strengths`: List of strong points in the resume
-   - `resume_weaknesses`: List of weak areas in the resume
-   - `improvement_suggestions`: List of suggestions to improve ATS score
-   - `final_recommendation`: Final hiring recommendation
-   - `interview_probability`: Estimated interview selection probability
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-### Web Interface
+Install dependencies:
 
-1. Run the Streamlit application:
-   ```bash
-   streamlit run app.py
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-2. The web interface will open in your default browser, allowing you to:
-   - Paste resume content
-   - Paste job description content
-   - Analyze the resume against the job description
-   - View detailed analysis results
+---
+
+## Environment Variables
+
+Create a `.env` file in the project root.
+
+Example:
+
+```env
+NVIDIA_API_KEY=your_api_key_here
+```
+
+You can use the provided `.env.example` file as reference.
+
+---
+
+## Run the Application
+
+Start the Streamlit app:
+
+```bash
+streamlit run app/app.py
+```
+
+The application will open in your browser.
+
+---
+
+## How It Works
+
+1. User provides:
+   - Resume content
+   - Job description
+
+2. The analyzer evaluates:
+   - ATS keyword alignment
+   - Technical skill relevance
+   - Experience alignment
+   - Resume strengths and weaknesses
+
+3. The system generates:
+   - ATS score
+   - Missing skills
+   - Hiring recommendation
+   - Interview probability
+   - Improvement suggestions
+
+---
+
+## Architecture
+
+The application uses an LLM-powered ATS evaluation pipeline:
+
+1. Resume and Job Description are provided as input
+2. Prompt templates structure ATS evaluation tasks
+3. NVIDIA AI endpoints process the analysis
+4. Structured responses are validated using Pydantic
+5. Streamlit displays the ATS evaluation dashboard
+
+---
 
 ## Important Rules
 
 - ONLY analyzes information explicitly present in the resume
-- NEVER invents or assumes skills, projects, certifications, experience, education, or achievements
-- If information is missing, explicitly mentions it
-- Does NOT create hypothetical resumes or example content
-- Keeps all evaluations grounded strictly in provided resume content
-- Be concise, professional, and evidence-based
+- NEVER invents skills, certifications, or experience
+- Keeps evaluations evidence-based
+- Provides ATS-focused recommendations
+- Maintains concise and professional output
 
-## Response Schema
+---
 
-The analyzer returns responses in the following schema (defined in `schema.py`):
+## Future Improvements
 
-```python
-class ATSResponse(BaseModel):
-    ats_score: int
-    matching_skills: List[str]
-    missing_skills: List[str]
-    experience_alignment: str
-    resume_strengths: List[str]
-    resume_weaknesses: List[str]
-    improvement_suggestions: List[str]
-    final_recommendation: str
-    interview_probability: str
+- PDF resume upload
+- Resume parsing using OCR
+- Multi-resume comparison
+- Export analysis to PDF
+- Resume optimization assistant
+- Skill gap visualization
+- Advanced ATS scoring models
+- Authentication system
+- Resume history tracking
+
+---
+
+## Requirements
+
+Main dependencies:
+
+```txt
+streamlit
+pydantic
+python-dotenv
+langchain
+langchain-community
+langchain-core
+langchain-nvidia-ai-endpoints
+openrouter
+pandas
+numpy
 ```
 
-## Example
-
-Here's an example of how to use the analyzer:
-
-```python
-from core import analyze_resume
-
-resume_text = """
-John Doe
-Software Engineer
-
-Skills:
-- Python
-- JavaScript
-- SQL
-- Machine Learning
-- Data Analysis
-
-Experience:
-- Senior Software Engineer at Tech Corp (2018-Present)
-- Software Engineer at Dev Solutions (2015-2018)
-"""
-
-job_description_text = """
-We are looking for a Senior Software Engineer with expertise in:
-- Python
-- JavaScript
-- Machine Learning
-- Data Analysis
-
-Experience with cloud platforms is a plus.
-"""
-
-result = analyze_resume(resume_text, job_description_text)
-print(result)
-```
+---
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
 
 ## License
 
 This project is licensed under the MIT License.
+
+---
+
+## Author
+
+Khadar Basha Jilan
+
+GitHub: https://github.com/khadarbashajilan
